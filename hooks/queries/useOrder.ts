@@ -7,10 +7,15 @@ import {
 import { OrderStatus } from "@/types/Order";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const useOrders = () => {
+export const useOrders = (params?: {
+  status?: string;
+  from?: string;
+  to?: string;
+}) => {
   return useQuery({
-    queryKey: ["orders", "list"],
-    queryFn: getOrdersSerivce,
+    queryKey: ["orders", "list", params],
+    queryFn: () => getOrdersSerivce(params),
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };
 

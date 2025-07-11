@@ -4,7 +4,10 @@ import IBaseApiReponse from "@/types/BaseApiReponse";
 import OrderType, { OrderStatus } from "@/types/Order";
 
 interface IGetOrderResponse extends IBaseApiReponse {
-  data: OrderType[];
+  orders: OrderType[];
+  limit?: number;
+  currentPage?: number;
+  totalPages?: number;
 }
 
 interface ICreateOrderResponse extends IBaseApiReponse {
@@ -19,8 +22,14 @@ interface IUpdateOrderStatusReponse extends IBaseApiReponse {
   data: OrderType;
 }
 
-export const getOrdersSerivce = () => {
-  return axiosInstance.get<IGetOrderResponse>(ApiRoutes.ORDER.GET_LIST);
+export const getOrdersSerivce = (params?: {
+  status?: string;
+  from?: string;
+  to?: string;
+}) => {
+  return axiosInstance.get<IGetOrderResponse>(ApiRoutes.ORDER.GET_LIST, {
+    params,
+  });
 };
 
 export const createOrderSerivce = (

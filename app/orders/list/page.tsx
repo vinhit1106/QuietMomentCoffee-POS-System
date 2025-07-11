@@ -13,6 +13,8 @@ import { DateRange } from "react-day-picker";
 import { Button } from "@/components/ui/button";
 import { XIcon } from "lucide-react";
 import { useOrders } from "@/hooks/queries/useOrder";
+import { useRouter, useSearchParams } from "next/navigation";
+import AppRoutes from "@/constant/AppRoutes.constant";
 
 export default function OrdersListPage() {
   const [modalOrderState, setOrderModalState] = useState<{
@@ -20,51 +22,47 @@ export default function OrdersListPage() {
     selected_order?: OrderType;
     mode?: "view" | "edit";
   }>({ isOpen: false });
+  const params = useSearchParams();
+  const router = useRouter();
+  const [selectedStatusTab, setSelectedStatusTab] = useState<string>(
+    params.get("status") || "all",
+  );
+  const [dateFilter, setDateFilter] = useState<DateRange>({
+    from: (params.get("from") && new Date(params.get("from")!)) || undefined,
+    to: (params.get("to") && new Date(params.get("to")!)) || undefined,
+  });
+  const ordersQuery = useOrders({
+    status: selectedStatusTab !== "all" ? selectedStatusTab : undefined,
+    from: dateFilter?.from ? dateFilter.from.toISOString() : undefined,
+    to: dateFilter?.to ? dateFilter.to.toISOString() : undefined,
+  });
+  const orders = ordersQuery.data?.data.data.orders || [];
 
-  const [dateFilter, setDateFilter] = useState<DateRange>();
-  const ordersQuery = useOrders();
-  const orders = ordersQuery.data?.data.data || [];
-  const getFilteredOrders = (status: string) => {
-    return orders.filter((order) => {
-      if (status !== "all" && order.status !== status) return false;
-      if (!dateFilter?.from) return true;
+  useEffect(() => {
+    const status = selectedStatusTab !== "all" ? selectedStatusTab : undefined;
+    const from = dateFilter?.from ? dateFilter.from.toISOString() : undefined;
+    const to = dateFilter?.to ? dateFilter.to.toISOString() : undefined;
 
-      // Filter By Date Range
-      const orderCreatedDate = new Date(order.createdAt);
-      if (isNaN(orderCreatedDate.getTime())) {
-        return false;
-      }
-      // Reset time to compare only dates
-      const orderDate = new Date(
-        orderCreatedDate.getFullYear(),
-        orderCreatedDate.getMonth(),
-        orderCreatedDate.getDate(),
-      );
-      const fromDate = new Date(
-        dateFilter.from.getFullYear(),
-        dateFilter.from.getMonth(),
-        dateFilter.from.getDate(),
-      );
+    const queryParams: Record<string, string> = {};
+    if (status) queryParams.status = status;
+    if (from) queryParams.from = from;
+    if (to) queryParams.to = to;
 
-      // If no 'to' date, filter for single day
-      if (!dateFilter.to) {
-        return orderDate.getTime() === fromDate.getTime();
-      }
+    const searchParams = new URLSearchParams(queryParams).toString();
+    router.replace(AppRoutes.ORDER.LIST + "?" + searchParams);
+  }, [selectedStatusTab, dateFilter]);
 
-      // Filter by date range
-      const toDate = new Date(
-        dateFilter.to.getFullYear(),
-        dateFilter.to.getMonth(),
-        dateFilter.to.getDate(),
-      );
-      return orderDate >= fromDate && orderDate <= toDate;
-    });
-  };
   const statusTabs = ["all", ...OrderStatusBadge.map((item) => item.status)];
-
   return (
     <div>
-      <Tabs defaultValue="all" className="items-start">
+      <Tabs
+        defaultValue="all"
+        className="items-start"
+        value={selectedStatusTab}
+        onValueChange={(value) => {
+          setSelectedStatusTab(value);
+        }}
+      >
         <div className="mb-2 flex w-full items-center justify-between">
           <TabsList>
             {statusTabs.map((sTab) => (
@@ -78,7 +76,7 @@ export default function OrdersListPage() {
             ))}
           </TabsList>
           <div className="flex space-x-1">
-            {dateFilter && (
+            {(dateFilter?.from || dateFilter?.to) && (
               <Button
                 variant="link"
                 className="cursor-pointer bg-transparent"
@@ -100,7 +98,7 @@ export default function OrdersListPage() {
             key={"statusTab-" + sTab}
           >
             <div className="grid w-full grid-cols-5 gap-4">
-              {getFilteredOrders(sTab).map((order) => (
+              {orders.map((order) => (
                 <OrderCard
                   key={order._id}
                   order={order}
