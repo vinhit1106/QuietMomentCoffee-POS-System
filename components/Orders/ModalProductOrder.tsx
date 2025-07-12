@@ -73,7 +73,10 @@ const ModalProductOrder = ({
   };
   return (
     <Dialog defaultOpen={true} onOpenChange={onClose} modal>
-      <DialogContent className="sm:max-w-5xl">
+      <DialogContent
+        className="sm:max-w-5xl"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle></DialogTitle>
         </DialogHeader>

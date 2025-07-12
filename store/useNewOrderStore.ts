@@ -7,6 +7,7 @@ interface NewOrderStoreType {
   addOrderItem: (item: OrderItemType) => void;
   updateOrderItem: (item: Partial<OrderItemType>) => void;
   deleteOrderItem: (item_id: string) => void;
+  clearOrderItems: () => void;
 }
 
 const useNewOrderStore = create<NewOrderStoreType>((set, get) => ({
@@ -52,6 +53,7 @@ const useNewOrderStore = create<NewOrderStoreType>((set, get) => ({
     set((state) => ({
       orderItems: state.orderItems.filter((o) => o._id !== item_id),
     })),
+  clearOrderItems: () => set(() => ({ orderItems: [] })),
 }));
 
 export default useNewOrderStore;

@@ -9,18 +9,14 @@ import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import CheckoutModalContent from "./modal/CheckoutModalContent";
+import CheckoutModal from "./modal/CheckoutModal";
 
 export default function CheckOut() {
   const [orderItemEdit, setOrderItemEdit] = useState<OrderItemType | null>(
     null,
   );
+
+  const [openCheckoutModal, setOpenCheckoutModal] = useState(false);
 
   const { orderItems, updateOrderItem, deleteOrderItem } = useNewOrderStore(
     useShallow((state) => ({
@@ -148,22 +144,25 @@ export default function CheckOut() {
         </ScrollArea>
         <Separator className="my-4" />
         {/* Checkout Order */}
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              className="w-full cursor-pointer bg-amber-600 hover:bg-amber-900"
-              size="lg"
-            >
-              Checkout Order
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="min-w-7xl">
-            <DialogTitle>Checkout</DialogTitle>
-            <CheckoutModalContent orderItems={orderItems} />
-          </DialogContent>
-        </Dialog>
+
+        <Button
+          className="w-full cursor-pointer bg-amber-600 hover:bg-amber-900"
+          size="lg"
+          onClick={() => setOpenCheckoutModal(true)}
+        >
+          Checkout Order
+        </Button>
       </div>
 
+      {/* Checkout Modal*/}
+      {openCheckoutModal && (
+        <CheckoutModal
+          orderItems={orderItems}
+          onClose={() => setOpenCheckoutModal(false)}
+        />
+      )}
+
+      {/* Order Item Edit Modal */}
       {orderItemEdit && (
         <ModalProductOrder
           orderIdEdit={orderItemEdit._id}

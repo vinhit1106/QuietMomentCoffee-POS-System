@@ -20,9 +20,14 @@ export const useOrders = (params?: {
 };
 
 export const useCreateOrder = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["orders", "create"],
     mutationFn: createOrderSerivce,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["orders", "list"] });
+      return data;
+    },
   });
 };
 export const useDeleteOrder = (orderId: string) => {

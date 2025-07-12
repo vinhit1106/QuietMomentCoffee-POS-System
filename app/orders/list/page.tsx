@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import OrderCard from "./_components/OrderCard";
+import OrderCard, { OrderCardSkeleton } from "./_components/OrderCard";
 import OrderDatePickerFilter from "./_components/OrderDatePickerFilter";
 import { useEffect, useState } from "react";
 import OrderType from "@/types/Order";
@@ -15,6 +15,7 @@ import { XIcon } from "lucide-react";
 import { useOrders } from "@/hooks/queries/useOrder";
 import { useRouter, useSearchParams } from "next/navigation";
 import AppRoutes from "@/constant/AppRoutes.constant";
+import LayoutListOrder from "@/components/layout/grid/LayoutListOrder";
 
 export default function OrdersListPage() {
   const [modalOrderState, setOrderModalState] = useState<{
@@ -36,6 +37,7 @@ export default function OrdersListPage() {
     from: dateFilter?.from ? dateFilter.from.toISOString() : undefined,
     to: dateFilter?.to ? dateFilter.to.toISOString() : undefined,
   });
+  const isFetchingOrders = ordersQuery.isFetching || ordersQuery.isRefetching;
   const orders = ordersQuery.data?.data.data.orders || [];
 
   useEffect(() => {
@@ -97,28 +99,32 @@ export default function OrdersListPage() {
             className="w-full"
             key={"statusTab-" + sTab}
           >
-            <div className="grid w-full grid-cols-5 gap-4">
-              {orders.map((order) => (
-                <OrderCard
-                  key={order._id}
-                  order={order}
-                  onViewDetails={() =>
-                    setOrderModalState({
-                      isOpen: true,
-                      selected_order: order,
-                      mode: "view",
-                    })
-                  }
-                  onEditOrder={() =>
-                    setOrderModalState({
-                      isOpen: true,
-                      selected_order: order,
-                      mode: "edit",
-                    })
-                  }
-                />
-              ))}
-            </div>
+            <LayoutListOrder>
+              {isFetchingOrders
+                ? Array.from({ length: 10 }, (_, i) => (
+                    <OrderCardSkeleton key={`order-skeleton-${i}`} />
+                  ))
+                : orders.map((order) => (
+                    <OrderCard
+                      key={order._id}
+                      order={order}
+                      onViewDetails={() =>
+                        setOrderModalState({
+                          isOpen: true,
+                          selected_order: order,
+                          mode: "view",
+                        })
+                      }
+                      onEditOrder={() =>
+                        setOrderModalState({
+                          isOpen: true,
+                          selected_order: order,
+                          mode: "edit",
+                        })
+                      }
+                    />
+                  ))}
+            </LayoutListOrder>
           </TabsContent>
         ))}
       </Tabs>

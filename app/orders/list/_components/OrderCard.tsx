@@ -13,18 +13,41 @@ import { Separator } from "@/components/ui/separator";
 import OrderType from "@/types/Order";
 import { numberWithSeparator } from "@/utils";
 import { format } from "date-fns";
-import {
-  BookCheck,
-  Calendar,
-  CircleCheckBig,
-  ClipboardCheck,
-  Clock,
-  Eye,
-  Flower,
-  GlassWater,
-  SquarePen,
-} from "lucide-react";
+import { Calendar, Eye, GlassWater, SquarePen } from "lucide-react";
 import StatusBadge from "./StatusBadge";
+
+export function OrderCardSkeleton() {
+  return (
+    <Card className="animate-pulse rounded-sm shadow">
+      <CardHeader>
+        <CardTitle className="h-5 w-1/2 rounded-sm bg-gray-200" />
+        <CardDescription className="h-4 w-1/3 rounded-sm bg-gray-200" />
+        <CardAction>
+          <Badge className="h-5 w-20 bg-gray-200" />
+        </CardAction>
+      </CardHeader>
+
+      <CardContent>
+        <Separator className="mb-2" />
+        <div className="flex h-[76px] flex-nowrap justify-between text-sm">
+          <div className="w-[68px] rounded-sm bg-gray-200"></div>
+          <div className="w-[100px] rounded-sm bg-gray-200"></div>
+        </div>
+        <Separator className="my-2" />
+        <div className="flex flex-nowrap items-center justify-between">
+          <strong className="h-6 w-1/4 rounded-sm bg-gray-200" />
+          <strong className="h-6 w-1/3 rounded-sm bg-gray-200" />
+        </div>
+      </CardContent>
+      <CardFooter>
+        <div className="flex w-full gap-2">
+          <div className="h-9 w-[132px] rounded-md bg-gray-200" />
+          <div className="h-9 w-[74px] rounded-md bg-gray-200" />
+        </div>
+      </CardFooter>
+    </Card>
+  );
+}
 
 export default function OrderCard({
   order,
