@@ -25,6 +25,7 @@ export default function CheckOut() {
       deleteOrderItem: state.deleteOrderItem,
     })),
   );
+
   return (
     <>
       <div className="border-muted flex h-fit w-sm flex-col rounded-md border p-4 shadow">

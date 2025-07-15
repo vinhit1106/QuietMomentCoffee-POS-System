@@ -4,8 +4,10 @@ const AppRoutes = {
     LIST: "/orders/list",
     NEW: "/orders/add",
   },
-  BILL: "/bills",
-  MANAGE: "/manage",
+  CUSTOMER: "/customer",
+  INVENTORY: "/inventory",
+  EDIT_MENU: "/edit_menu",
+  SETTINGS: "/settings",
 };
 
 export default AppRoutes;
