@@ -37,7 +37,7 @@ const ProductRankItem = () => {
 
 export default function ProductRankingCard() {
   return (
-    <Card className="gap-y-4 rounded-lg shadow-none">
+    <Card className="gap-y-4 rounded-lg">
       <CardHeader>
         <CardTitle>Top Sản Phẩm Bán Chạy</CardTitle>
         <CardDescription>Hôm nay</CardDescription>

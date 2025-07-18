@@ -12,13 +12,15 @@ import { Badge } from "../ui/badge";
 import { CircleAlert, TriangleAlert } from "lucide-react";
 import { Progress } from "../ui/progress";
 import { cn } from "@/lib/utils";
+import BadgeStatus from "../common/Inventory/InventoryBadgeStatus";
+import IngredientType from "@/types/Ingredient";
 
 const IngredientWarningItem = ({
   level,
 }: {
-  level: "warning" | "critical";
+  level: IngredientType["status"];
 }) => {
-  const isWarning = level == "warning";
+  const isLow = level == "low";
   const isCritical = level == "critical";
   return (
     <div className="flex items-center justify-between gap-2">
@@ -41,7 +43,7 @@ const IngredientWarningItem = ({
             <Progress
               className={cn(
                 "max-w-16",
-                isWarning
+                isLow
                   ? "bg-amber-100 [&_[data-slot='progress-indicator']]:bg-amber-500"
                   : isCritical
                     ? "bg-red-100 [&_[data-slot='progress-indicator']]:bg-red-500"
@@ -52,35 +54,14 @@ const IngredientWarningItem = ({
           </div>
         </div>
       </div>
-      <Badge
-        variant="secondary"
-        className={
-          isWarning
-            ? "bg-amber-100 text-amber-500"
-            : isCritical
-              ? "bg-red-100 text-red-500"
-              : ""
-        }
-      >
-        {isWarning ? (
-          <>
-            <TriangleAlert />
-            <span>Low</span>
-          </>
-        ) : isCritical ? (
-          <>
-            <CircleAlert />
-            <span>Critical</span>
-          </>
-        ) : null}
-      </Badge>
+      <BadgeStatus status={level} />
     </div>
   );
 };
 
 export default function LowIngredientCard() {
   return (
-    <Card className="gap-y-4 rounded-lg shadow-none">
+    <Card className="gap-y-4 rounded-lg">
       <CardHeader>
         <CardTitle>Cảnh báo nguyên vật liệu</CardTitle>
         <CardDescription>
@@ -90,7 +71,7 @@ export default function LowIngredientCard() {
       <CardContent className="">
         <ScrollArea className="h-[400px]">
           <div className="grid grid-cols-1 gap-y-2 pr-4">
-            <IngredientWarningItem level="warning" />
+            <IngredientWarningItem level="low" />
             <IngredientWarningItem level="critical" />
           </div>
         </ScrollArea>

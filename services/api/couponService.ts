@@ -19,13 +19,13 @@ interface ICheckCouponResponse extends IBaseApiReponse {
   };
 }
 
-export const getCouponsSerivce = () => {
-  return axiosInstance.get<IGetCouponResponse>(ApiRoutes.GET_COUPONS);
+export const getCouponsService = () => {
+  return axiosInstance.get<IGetCouponResponse>(ApiRoutes.COUPON.GET_LIST);
 };
 
-export const createCouponSerivce = (data: Partial<CouponType>) => {
+export const createCouponService = (data: Partial<CouponType>) => {
   return axiosInstance.post<ICreateCouponResponse>(
-    ApiRoutes.CREATE_COUPON,
+    ApiRoutes.COUPON.CREATE,
     data,
   );
 };
@@ -34,5 +34,8 @@ export const checkCouponService = (data: {
   coupon_code: string;
   price: number;
 }) => {
-  return axiosInstance.post<ICheckCouponResponse>(ApiRoutes.CHECK_COUPON, data);
+  return axiosInstance.post<ICheckCouponResponse>(
+    ApiRoutes.COUPON.CHECKING,
+    data,
+  );
 };

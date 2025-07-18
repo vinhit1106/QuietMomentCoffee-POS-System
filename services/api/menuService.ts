@@ -8,5 +8,5 @@ interface IGetMenuResponse extends IBaseApiReponse {
 }
 
 export const getMenuService = () => {
-  return axiosInstance.get<IGetMenuResponse>(ApiRoutes.GET_MENU);
+  return axiosInstance.get<IGetMenuResponse>(ApiRoutes.PRODUCT.GET_LIST);
 };

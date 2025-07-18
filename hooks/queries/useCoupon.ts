@@ -1,27 +1,27 @@
 import {
   checkCouponService,
-  createCouponSerivce,
-  getCouponsSerivce,
+  createCouponService,
+  getCouponsService,
 } from "@/services/api/couponService";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useCoupons = () => {
   return useQuery({
-    queryKey: ["coupon", "list"],
-    queryFn: getCouponsSerivce,
+    queryKey: ["coupons", "list"],
+    queryFn: getCouponsService,
   });
 };
 
 export const useCreateCoupon = () => {
   return useMutation({
-    mutationKey: ["coupon", "create"],
-    mutationFn: createCouponSerivce,
+    mutationKey: ["coupons", "create"],
+    mutationFn: createCouponService,
   });
 };
 
 export const useCheckCoupon = () => {
   return useMutation({
-    mutationKey: ["coupon", "check"],
+    mutationKey: ["coupons", "check"],
     mutationFn: checkCouponService,
   });
 };

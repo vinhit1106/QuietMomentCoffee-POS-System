@@ -22,7 +22,7 @@ interface IUpdateOrderStatusReponse extends IBaseApiReponse {
   data: OrderType;
 }
 
-export const getOrdersSerivce = (params?: {
+export const getOrdersService = (params?: {
   status?: string;
   from?: string;
   to?: string;
@@ -32,7 +32,7 @@ export const getOrdersSerivce = (params?: {
   });
 };
 
-export const createOrderSerivce = (
+export const createOrderService = (
   data: Pick<OrderType, "items" | "notes" | "paymentMethod"> & {
     couponCode?: string;
   },
@@ -46,7 +46,7 @@ export const deleteOrderService = (orderId: string) => {
   );
 };
 
-export const updateOrderStatusSerivce = (
+export const updateOrderStatusService = (
   orderId: string,
   status: OrderStatus,
 ) => {

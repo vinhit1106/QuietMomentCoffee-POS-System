@@ -51,7 +51,7 @@ export default function StatsGrid() {
     },
   ];
   return (
-    <div className="border-border grid w-full grid-cols-4 gap-4 divide-x rounded-lg border p-4">
+    <div className="border-border grid w-full grid-cols-4 gap-4 divide-x rounded-lg border p-4 shadow-sm">
       {stats.map((stat, index) => (
         <StatsCard key={index} {...stat} />
       ))}

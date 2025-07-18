@@ -1,5 +1,7 @@
 const ApiRoutes = {
-  GET_MENU: "/product",
+  PRODUCT: {
+    GET_LIST: "product",
+  },
   ORDER: {
     GET_LIST: "/order",
     CREATE: "/order/", // POST method
@@ -7,11 +9,19 @@ const ApiRoutes = {
     UPDATE_STATUS: (orderId: string) => `/order/${orderId}/status`,
     DELETE: (orderId: string) => `/order/${orderId}`,
   },
-  GET_COUPONS: "/coupon",
-  CHECK_COUPON: "/coupon/check",
-  CREATE_COUPON: "/coupon/create",
+  COUPON: {
+    GET_LIST: "/coupon",
+    CREATE: "/coupon", // POST method
+    CHECKING: "/coupon/check",
+  },
   CATEGORY: {
     GET_LIST: "/category",
+  },
+  INGREDIENT: {
+    GET_LIST: "/ingredient",
+    CREATE: "/ingredient", // POST method
+    UPDATE: (id: string) => `/ingredient/${id}`, // PATCH method
+    DELETE: (id: string) => `/ingredient/${id}`, // DELETE method
   },
 };
 

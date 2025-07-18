@@ -1,8 +1,8 @@
 import {
-  createOrderSerivce,
+  createOrderService,
   deleteOrderService,
-  getOrdersSerivce,
-  updateOrderStatusSerivce,
+  getOrdersService,
+  updateOrderStatusService,
 } from "@/services/api/orderService";
 import { OrderStatus } from "@/types/Order";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -14,7 +14,7 @@ export const useOrders = (params?: {
 }) => {
   return useQuery({
     queryKey: ["orders", "list", params],
-    queryFn: () => getOrdersSerivce(params),
+    queryFn: () => getOrdersService(params),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };
@@ -23,7 +23,7 @@ export const useCreateOrder = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["orders", "create"],
-    mutationFn: createOrderSerivce,
+    mutationFn: createOrderService,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["orders", "list"] });
       return data;
@@ -46,7 +46,7 @@ export const useUpdateOrderStatus = (orderId: string) => {
   return useMutation({
     mutationKey: ["orders", "updateStatus", orderId],
     mutationFn: (status: OrderStatus) =>
-      updateOrderStatusSerivce(orderId, status),
+      updateOrderStatusService(orderId, status),
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
